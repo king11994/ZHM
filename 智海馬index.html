@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雅思詞彙潛力測評 - 澳門智海馬科技</title>
+    <style>
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .company-name {
+            text-align: center;
+            color: #1a73e8;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .quiz-title {
+            text-align: center;
+            color: #1a73e8;
+            font-size: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a73e8;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            text-align: right;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .question {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f0f7ff;
+            border-radius: 5px;
+            color: #1a73e8;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background-color: #f0f7ff;
+            border-color: #1a73e8;
+        }
+        
+        .score-container {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        
+        .feedback {
+            text-align: center;
+            font-size: 16px;
+            min-height: 24px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .correct {
+            color: #34a853;
+            background-color: #e6f4ea;
+        }
+        
+        .incorrect {
+            color: #ea4335;
+            background-color: #fce8e6;
+        }
+        
+        .next-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+            display: none;
+        }
+        
+        .next-btn:hover {
+            background-color: #0d62c9;
+        }
+        
+        .result-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .urgent-offer {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        
+        .benefits {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .benefits li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .benefits li::before {
+            content: "✓";
+            color: #2e7d32;
+            font-weight: bold;
+            position: absolute;
+            left: 5px;
+        }
+        
+        .efficiency-box {
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .efficiency-item {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: #bbdefb;
+            border-radius: 5px;
+            min-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="company-name">澳門智海馬科技</div>
+    <div class="quiz-title">雅思詞彙潛力測評</div>
+    
+    <div class="quiz-container">
+        <div class="progress" id="progress">題目 1/10</div>
+        <div class="score-container">
+            當前得分: <span class="score">0</span>/100
+        </div>
+        <div class="question" id="question">正在從詞庫隨機選題...</div>
+        <div class="options-container" id="options-container"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="next-btn" id="next-btn">下一題</button>
+    </div>
+    
+    <div class="result-container" id="result-container">
+        <h2>測評完成</h2>
+        <p>您的詞彙潛力得分: <span id="final-score" class="highlight">0</span>/100</p>
+        <div id="result-message"></div>
+        
+        <div class="urgent-offer">
+            <h3>完成啦！這個小測試就當是熱身運動～</h3>
+            <p>想真正摸清楚自己的單詞庫底蘊？立即私信預約 <span class="highlight">免費 1 對 1 專業單詞量評測</span>！</p>
+            
+            <div class="benefits">
+                <p>我們的「抗遺忘記憶法」教學系統：</p>
+                <ul>
+                    <li><strong>AI 智能分析 + 真人導師雙重把關</strong>，精準定位詞彙盲區</li>
+                    <li><strong>即時生成「詞彙成長地圖」</strong>，從基礎詞到學術詞分層突破</li>
+                </ul>
+            </div>
+            
+            <div class="efficiency-box">
+                <h4>驚人學習效率：</h4>
+                <div class="efficiency-item">
+                    <div>8-10小時</div>
+                    <div>學完一學期單詞</div>
+                </div>
+                <div class="efficiency-item">
+                    <div>40-60小時</div>
+                    <div>學完3年詞彙量</div>
+                </div>
+            </div>
+            
+            <p class="highlight">立即獲取你的「詞彙加速器」，開啟高效背詞之旅！ 🚀</p>
+            <p>（適用 6-18 歲學生，家長可代預約）</p>
+        </div>
+    </div>
+    
+    <script>
+        // 高級雅思詞彙庫
+        const fullWordPool = [
+            { english: "aberration", chinese: "反常現象" },
+            { english: "cacophony", chinese: "刺耳的聲音" },
+            { english: "dearth", chinese: "缺乏" },
+            { english: "ebullient", chinese: "熱情洋溢的" },
+            { english: "fastidious", chinese: "挑剔的" },
+            { english: "garrulous", chinese: "喋喋不休的" },
+            { english: "harangue", chinese: "長篇大論" },
+            { english: "iconoclast", chinese: "反對崇拜偶像者" },
+            { english: "juxtaposition", chinese: "並列" },
+            { english: "kowtow", chinese: "叩頭" }
+        ];
+
+        // 隨機選擇10個單詞
+        const wordPairs = [...fullWordPool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        
+        // 初始化變量
+        let currentQuestion = null;
+        let score = 0;
+        let currentQuestionIndex = 0;
+        const totalQuestions = 10;
+        
+        // DOM元素
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const nextBtn = document.getElementById('next-btn');
+        const feedbackElement = document.getElementById('feedback');
+        const scoreElement = document.querySelector('.score');
+        const resultContainer = document.getElementById('result-container');
+        const finalScoreElement = document.getElementById('final-score');
+        const resultMessageElement = document.getElementById('result-message');
+        const progressElement = document.getElementById('progress');
+        
+        // 顯示新問題
+        function showNewQuestion() {
+            if (currentQuestionIndex >= totalQuestions) {
+                showFinalResult();
+                return;
+            }
+            
+            // 模擬隨機加載效果
+            questionElement.textContent = "加載中...";
+            setTimeout(() => {
+                currentQuestion = wordPairs[currentQuestionIndex];
+                questionElement.textContent = currentQuestion.english;
+                progressElement.textContent = `題目 ${currentQuestionIndex + 1}/${totalQuestions}`;
+                
+                // 獲取選項（1正確+3錯誤）
+                const correctOption = currentQuestion.chinese;
+                const wrongOptions = getWrongOptions(correctOption);
+                
+                // 合併並打亂選項順序
+                const allOptions = [correctOption, ...wrongOptions];
+                for (let i = allOptions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allOptions[i], allOptions[j]] = [allOptions[j], allOptions[i]];
+                }
+                
+                // 顯示選項
+                optionsContainer.innerHTML = '';
+                allOptions.forEach(option => {
+                    const div = document.createElement('div');
+                    div.className = 'option';
+                    div.textContent = option;
+                    div.addEventListener('click', () => checkAnswer(option));
+                    optionsContainer.appendChild(div);
+                });
+                
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'feedback';
+                nextBtn.style.display = 'none';
+            }, 300);
+        }
+        
+        // 獲取錯誤選項
+        function getWrongOptions(correctAnswer) {
+            const wrongOptions = [];
+            const allChinese = fullWordPool.map(pair => pair.chinese);
+            
+            // 移除正確答案
+            const index = allChinese.indexOf(correctAnswer);
+            if (index > -1) {
+                allChinese.splice(index, 1);
+            }
+            
+            // 隨機選擇三個錯誤選項
+            while (wrongOptions.length < 3 && allChinese.length > 0) {
+                const randomIndex = Math.floor(Math.random() * allChinese.length);
+                const option = allChinese[randomIndex];
+                
+                if (!wrongOptions.includes(option)) {
+                    wrongOptions.push(option);
+                    allChinese.splice(randomIndex, 1);
+                }
+            }
+            
+            return wrongOptions;
+        }
+        
+        // 檢查答案
+        function checkAnswer(selectedOption) {
+            // 禁用所有選項點擊
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                
+                // 標記正確答案
+                if (option.textContent === currentQuestion.chinese) {
+                    option.style.backgroundColor = '#e6f4ea';
+                    option.style.borderColor = '#34a853';
+                }
+                
+                // 標記錯誤答案（如果是用戶選擇的）
+                if (option.textContent === selectedOption && selectedOption !== currentQuestion.chinese) {
+                    option.style.backgroundColor = '#fce8e6';
+                    option.style.borderColor = '#ea4335';
+                }
+            });
+            
+            if (selectedOption === currentQuestion.chinese) {
+                score += 10;
+                scoreElement.textContent = score;
+                feedbackElement.textContent = "正確! +10分";
+                feedbackElement.className = "feedback correct";
+            } else {
+                feedbackElement.textContent = `不正確! 正確答案是: ${currentQuestion.chinese}`;
+                feedbackElement.className = "feedback incorrect";
+            }
+            
+            currentQuestionIndex++;
+            nextBtn.style.display = 'block';
+        }
+        
+        // 顯示最終結果
+        function showFinalResult() {
+            document.querySelector('.quiz-container').style.display = 'none';
+            resultContainer.style.display = 'block';
+            finalScoreElement.textContent = score;
+            
+            let message = "";
+            if (score >= 90) {
+                message = "表現不錯！但雅思高分需要掌握更多學術詞彙";
+            } else {
+                message = "<span class='highlight'>您的詞彙量明顯不足！</span> 系統學習非常必要";
+            }
+            
+            resultMessageElement.innerHTML = `
+                <p>${message}</p>
+                <p>本次測試僅評估了部分高階詞彙潛力</p>
+            `;
+        }
+        
+        // 事件監聽
+        nextBtn.addEventListener('click', showNewQuestion);
+        
+        // 初始化
+        setTimeout(showNewQuestion, 500);
+    </script>
+</body>
+</html>
